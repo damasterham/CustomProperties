@@ -19,8 +19,8 @@ namespace CustomProperties
         /// <param name="min"></param>
         public RangeProperty(T max, T min)
         {        
-            this.min = min;
-            this.max = max;
+            this.min = min; // Initial value needed, can't use SetMin since max not being set would cancel it out
+            SetMax(max);
             Fill();
         }
 
@@ -103,18 +103,24 @@ namespace CustomProperties
         /// Returns true if Current is equal to Min
         /// </summary>
         /// <returns>Returns true if Current is equal to Min</returns>
-        public bool IsEmpty()
+        public bool IsEmpty
         {
-           return min.Equals(current);
+            get
+            {
+                return min.Equals(current);
+            }
         }
 
         /// <summary>
         /// Returns true if Current is equal to Max
         /// </summary>
         /// <returns>Returns true if Current is equal to Max</returns>
-        public bool IsFull()
+        public bool IsFull
         {
-            return max.Equals(current);
+            get
+            {
+                return max.Equals(current);
+            }
         }
     }
 
