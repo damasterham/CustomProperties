@@ -9,6 +9,10 @@ namespace CustomProperties
     //RangeInt<T percentilce type>
     public class RangeInt : RangeProperty<int, float>//, IPrecantable<float>
     {
+        /// <inheritdoc/>  // Need Sandcastle or NDoc for this
+        /// <remarks>
+        /// Woop!
+        /// </remarks>
         public RangeInt(int max, int min) : base(max, min) { }
 
         public RangeInt(int max) : base(max, 0) { }
@@ -66,9 +70,7 @@ namespace CustomProperties
             if (amount < 0)
                 return;
 
-            int cur = current;
-            cur += amount;
-            SetCurrent(cur);
+            SetCurrent(current + amount);
         }
 
         public override void Subtract(int amount)
@@ -76,9 +78,7 @@ namespace CustomProperties
             if (amount < 0)
                 return;
 
-            int cur = current;
-            cur -= amount;
-            SetCurrent(cur);
+            SetCurrent(current - amount);
 
             //Add(amount * -1);
         }

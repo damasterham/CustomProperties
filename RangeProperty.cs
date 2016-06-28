@@ -12,6 +12,11 @@ namespace CustomProperties
         protected T min;
         protected T max;
 
+        /// <summary>
+        /// Constructs a RangePropery with Max and Min values
+        /// </summary>
+        /// <param name="max"></param>
+        /// <param name="min"></param>
         public RangeProperty(T max, T min)
         {        
             this.min = min;
@@ -21,18 +26,27 @@ namespace CustomProperties
 
         //public T Current { get { return current; } }
 
+        /// <summary>
+        /// Get or Set the maximum value of the range. The Max value must be larger than the Min value.
+        /// </summary>
         public T Max
         {
             get { return max; }
             set { SetMax(value); }
         }
 
+        /// <summary>
+        /// Get or Set the minimum value of the range. The Min value must be smaller than the Max value.
+        /// </summary>
         public T Min
         {
             get { return min; }
             set { SetMin(value); }
         }
 
+        /// <summary>
+        /// Get or Set the current value within Min and Max range.
+        /// </summary>
         public T Current
         {
             get
@@ -42,15 +56,19 @@ namespace CustomProperties
             }
             set
             {
-
                 SetCurrent(value);
             }
         }
+
+        
         protected abstract void SetMin(T amount);
         protected abstract void SetMax(T amount);
         protected abstract void SetCurrent(T amount);
         protected abstract U GetCurrentPercent();
 
+        /// <summary>
+        /// Get the Current value as a percentage
+        /// </summary>
         public U CurrentPercent
         {
             get
@@ -58,9 +76,23 @@ namespace CustomProperties
                return GetCurrentPercent();
             }
         }
+        /// <summary>
+        /// Add an amount to the Current value
+        /// </summary>
+        /// <param name="amount"></param>
         public abstract void Add(T amount);
+        /// <summary>
+        /// Subtract an amount from the Current value
+        /// </summary>
+        /// <param name="amount"></param>
         public abstract void Subtract(T amount);
+        /// <summary>
+        /// Set the Current value to Max
+        /// </summary>
         public abstract void Fill();
+        /// <summary>
+        /// Set the Current value to Min;
+        /// </summary>
         public abstract void Empty();
     }
 
