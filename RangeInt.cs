@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModularSkills.CustomProperties
+namespace CustomProperties
 {
     //RangeInt<T percentilce type>
     public class RangeInt : RangeProperty<int, float>//, IPrecantable<float>

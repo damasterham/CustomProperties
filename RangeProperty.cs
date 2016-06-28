@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ModularSkills.Objects;
 
-namespace ModularSkills
+namespace CustomProperties
 {
     public abstract class RangeProperty<T, U>
     {
