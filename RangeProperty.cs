@@ -66,21 +66,13 @@ namespace CustomProperties
         protected abstract void SetCurrent(T amount);
         protected abstract U GetCurrentPercent();
 
-        /// <summary>
-        /// Get the Current value as a percentage
-        /// </summary>
-        public U CurrentPercent
-        {
-            get
-            {
-               return GetCurrentPercent();
-            }
-        }
+       
         /// <summary>
         /// Add an amount to the Current value
         /// </summary>
         /// <param name="amount"></param>
         public abstract void Add(T amount);
+
         /// <summary>
         /// Subtract an amount from the Current value
         /// </summary>
@@ -90,10 +82,40 @@ namespace CustomProperties
         /// Set the Current value to Max
         /// </summary>
         public abstract void Fill();
+
         /// <summary>
         /// Set the Current value to Min;
         /// </summary>
         public abstract void Empty();
+
+        /// <summary>
+        /// Get the Current value as a percentage
+        /// </summary>
+        public U CurrentPercent
+        {
+            get
+            {
+                return GetCurrentPercent();
+            }
+        }
+
+        /// <summary>
+        /// Returns true if Current is equal to Min
+        /// </summary>
+        /// <returns>Returns true if Current is equal to Min</returns>
+        public bool IsEmpty()
+        {
+           return min.Equals(current);
+        }
+
+        /// <summary>
+        /// Returns true if Current is equal to Max
+        /// </summary>
+        /// <returns>Returns true if Current is equal to Max</returns>
+        public bool IsFull()
+        {
+            return max.Equals(current);
+        }
     }
 
 }
