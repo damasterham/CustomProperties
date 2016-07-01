@@ -20,9 +20,9 @@ namespace CustomProperties
         /// <remarks>
         /// Woop!
         /// </remarks>
-        public RangeIntWithApendages(int max, int min) : base(max, min) { }
+        public RangeInt(int max, int min) : base(max, min) { }
 
-        public RangeIntWithApendages(int max) : base(max, 0) { }
+        public RangeInt(int max) : base(max, 0) { }
 
         protected override void SetMax(int amount)
         {
@@ -140,7 +140,13 @@ namespace CustomProperties
                 Current = Min + (int)(RangeAmount() * percent);
             }
         }
+        public override void Add(int amount)
+        {
+            if (amount < 0)
+                return;
 
+            SetCurrent(current + amount);
+        }
         public override void Add(int amount, bool isOverflowAllowed = false)
         {
             if (amount < 0)
