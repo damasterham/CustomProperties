@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace CustomProperties
 {
-    public abstract class RangeProperty<T, U>
+    /// <summary>
+    /// Base Class 
+    /// </summary>
+    /// <typeparam name="T">Meant for structs such as int, float or double</typeparam>
+    /// <typeparam name="U">Meant for structs such as int, float or double</typeparam> 
+    public abstract class RangeProperty<T, U> where T : struct where U : struct
     {
+        private T nullValue; // The null value of type, so pretty much 0 without writing its 0
+
         protected T current;
         protected T min;
         protected T max;
+        private bool incrementFlag;
+        protected T increment;
 
         /// <summary>
         /// Constructs a RangePropery with Max and Min values
@@ -60,24 +69,46 @@ namespace CustomProperties
             }
         }
 
-        
+        private RangeProperty<T,U>  appendage;
+        private RangeProperty<T,U> prependage;
+
+        public RangeProperty<T,U> Prependage
+        {
+            get { return prependage; }
+            set { prependage = value; }
+        }
+
+        public RangeProperty<T,U>  Appendage // This will add a whole lot of more contextual math, so All mutator methods would have to implement Appedage checks
+        {
+            get { return appendage; }
+            set { appendage = value; }
+        }
+
+
         protected abstract void SetMin(T amount);
         protected abstract void SetMax(T amount);
         protected abstract void SetCurrent(T amount);
+        protected abstract void SetCurrent(T amount, bool isOverflowAllowed);
+       //protected abstract U Difference(); // Changed to public U RangeAmount
         protected abstract U GetCurrentPercent();
+        protected abstract void SetCurrentPercent(U percent);
 
-       
+        public abstract U RangeAmount();
+
         /// <summary>
         /// Add an amount to the Current value
         /// </summary>
         /// <param name="amount"></param>
         public abstract void Add(T amount);
+        public abstract void Add(T amount, bool isOverflowAllowed);
 
         /// <summary>
         /// Subtract an amount from the Current value
         /// </summary>
         /// <param name="amount"></param>
         public abstract void Subtract(T amount);
+        public abstract void Subtract(T amount, bool isOverflowAllowed);
+
         /// <summary>
         /// Set the Current value to Max
         /// </summary>
@@ -89,7 +120,31 @@ namespace CustomProperties
         public abstract void Empty();
 
         /// <summary>
-        /// Get the Current value as a percentage
+        /// Increments Current value by IncremenValue
+        /// </summary>
+        public void Increment()
+        {
+            // Could maybe contain a check iff null/0 but Generic Type is complicated...
+            if (incrementFlag)
+                Add(increment);
+            else
+                throw new ArgumentNullException("IncrementalValue is 0, incrementing or decrementing would do nothing. Set the IncrementValue to use Increment() and Decrement()");
+
+        }
+
+        /// <summary>
+        /// Decrements Current value by IncrementValue
+        /// </summary>
+        public void Decrement()
+        {
+            if (incrementFlag)
+                Subtract(increment);
+            else
+                throw new ArgumentNullException("IncrementalValue is 0, incrementing or decrementing would do nothing. Set the IncrementValue to use Increment() and Decrement()");
+        }
+
+        /// <summary>
+        /// Get or Set the Current value as a percentage. 
         /// </summary>
         public U CurrentPercent
         {
@@ -97,6 +152,26 @@ namespace CustomProperties
             {
                 return GetCurrentPercent();
             }
+            set
+            {
+                SetCurrentPercent(value);
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the Increment value. The Increment value is used if you consitily want to increment or decremet the Current value using Increment() and Decrement() 
+        /// </summary>
+        public T IncrementValue
+        {
+            get { return increment; }
+            set {
+                    if (!nullValue.Equals(value))// All number structs initialize to 0 so by checking if the value passed is equal to the nullValue it's check if 0
+                    {
+                        increment = value;
+                        incrementFlag = true;
+                    }
+                   
+                }
         }
 
         /// <summary>
@@ -122,6 +197,7 @@ namespace CustomProperties
                 return max.Equals(current);
             }
         }
+
     }
 
 }

@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace CustomProperties
 {
-    //RangeInt<T percentilce type>
-
-        /// <summary>
+    /// <summary>
     /// Default implementation of RangeProperty using T as int and U as float.
     /// This is the tempalte for implementations, so if more should be added add here and branch it out to other implementeations
     /// </summary>
-    public class RangeInt : RangeProperty<int, float>//, IPrecantable<float>
+    public class RangeIntWithoutAppendages : RangeProperty<int, float>//, IPrecantable<float>
     {
         public bool BreakPointFlag = false;
 
@@ -20,9 +18,9 @@ namespace CustomProperties
         /// <remarks>
         /// Woop!
         /// </remarks>
-        public RangeIntWithApendages(int max, int min) : base(max, min) { }
+        public RangeInt(int max, int min) : base(max, min) { }
 
-        public RangeIntWithApendages(int max) : base(max, 0) { }
+        public RangeInt(int max) : base(max, 0) { }
 
         protected override void SetMax(int amount)
         {
@@ -57,58 +55,16 @@ namespace CustomProperties
         protected override void SetCurrent(int amount)
         {
             if (amount < min)
-            {
                 Empty();
-
-                if (Prependage != null)
-                {
-                    int excess = min - amount;
-                    Prependage.Subtract(excess);
-                }
-            }
             else if (amount > max)
-            {
                 Fill();
-
-                if (Appendage != null)
-                {
-                    int excess = max - amount;
-                    Appendage.Add(excess);
-                }
-            }
             else
                 current = amount;
         }
 
-        protected override void SetCurrent(int amount, bool IsExtensionAllowed = false)
+        protected override void SetCurrent(int amount, bool isOverflowAllowed)
         {
-            if (!IsExtensionAllowed)
-                SetCurrent(amount);
-            else
-            {
-                if (amount < min)
-                {
-                    Empty();
-
-                    int excess = min - amount;
-
-                    Prependage = new RangeInt(this.min, excess);
-
-                    Prependage.Subtract(excess);
-                }
-                else if (amount > max)
-                {
-                    Fill();
-
-                    int excess = min - amount;
-
-                    Appendage = new RangeInt(excess, this.max);
-
-                    Appendage.Add(excess);
-                }
-                else
-                    current = amount;
-            }          
+            throw new NotImplementedException();
         }
 
         public override float RangeAmount()
@@ -141,13 +97,18 @@ namespace CustomProperties
             }
         }
 
-        public override void Add(int amount, bool isOverflowAllowed = false)
+        public override void Add(int amount)
         {
             if (amount < 0)
                 return;
 
-            SetCurrent(current + amount, isOverflowAllowed);
+            SetCurrent(current + amount);
         }
+        public override void Add(int amount, bool no = false)
+        {
+            Add(amount);
+        }
+
 
         public override void Subtract(int amount)
         {
@@ -158,32 +119,19 @@ namespace CustomProperties
 
             //Add(amount * -1);
         }
-        public override void Subtract(int amount, bool isOverflowAllowed = false)
+        public override void Subtract(int amount, bool no = false)
         {
-            if (amount < 0)
-                return;
-
-            SetCurrent(current - amount, isOverflowAllowed);
-
-            //Add(amount * -1);
+            Subtract(amount);
         }
 
         public override void Fill()
         {
             current = max;
-
-            if (Appendage != null)
-            {
-                Appendage.Fill();
-            }           
         }
 
         public override void Empty()
         {
             current = min;
-
-            if (Prependage != null)
-                Prependage.Empty();
         }
 
         //protected float GetCurrentPrercent()
